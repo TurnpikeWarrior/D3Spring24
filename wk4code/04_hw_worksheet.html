@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>SVG Scatterplot Homework 1</title>
+        <title>Homework 4</title>
         <script src= "https://d3js.org/d3.v7.min.js"></script>
         <style type="text/css">
             /*TBD*/
@@ -11,54 +11,38 @@
     <body>
         <script type="text/javascript">
         
-        //1. Use this dataset for our scatterplot -- nothing to do.    
-        
-        /* NOTE: this looks different the data we used for a bar chart. 
-        It is an array of arrays. [200, 40] is the [x,y] values of the
-        first point in our scatterplot. Do you remember how to call 
-        array values? See our foundations 1 slide deck if needed.*/      
-            
-            const data = [
-                            [200, 40], [170, 100], [400, 60], [100, 150], [410, 300], [120, 220], [310, 260], [400, 110]
-            ];
+            //1. Consts/global variables
+            const svgW = 500;
+            const svgH = 400;
+            const margin = 25;
+            const radius = 6;    
 
-        //2. Declare SVG width and height in pixels (remember the ; after declaring variables!)
-            
-            //TODO: const 
-            //TODO: const
             const svgWidth = 800;
             const svgHeight = 600;
+            
+            //2. Data & related variables: max for x and y
+            const data = [
+                [200, 40], [170, 100], [400, 60], [100, 150], [410, 300], [120, 220], [310, 260], [400, 110]
+            ];
 
-        //3. Create our SVG element, applying the SVG (canvas) width and height 
-        //NOTE: this should be pretty straight forward from our example. 
-            
-            
-            //TODO: const svg = d3.select()
-                                // .append()
-                                // .attr() 
-                                // .attr(); //Hint: don't delete this ending ;
+            //3. d3.max to create viarables for max XY 
+            const maxX = d3.max(data, d=> d[0]);
+            const maxY = d3.max(data, d=> d[1]);
+
+            const xScale = d3.scaleLinear()
+                            .domain([0, maxX])
+                            .range([margin, svgW-margin]);
+
+            const yScale = d3.scaleLinear()
+                            .domain([0, maxY])
+                            .range([svgH-margin, margin]);
+
+            //4. SVG 
             const svg = d3.select("body")
                         .append("svg")
                         .attr("width", svgWidth)
                         .attr("height", svgHeight);
             
-        //4. Use "circle" (not "rect") and add them to SVG to visualize our data. 
-            
-        /*NOTE: Remember that "rect" needed the following in .attr(): 
-        x,y,width,height. But, "circle" requires different parameters
-        (3 in total)-check today's slide deck.*/ 
-        //TIP: get the circles showing before you attempt the labels (step 5) 
-            
-            //TODO: svg.selectAll()
-                        // .data()
-                        // .enter()
-                        // .append()
-                        // .attr() //(a required circle value, and a function of what it returns)  // Hint: we want to return d[] with the x value of the array
-                        // .attr() //(a required circle value, and a function of what it returns)  // Hint: we want to return d[] with the y value of the array 
-                        // .attr() //(another required circle value, and a number: try 10)
-                        // .attr(); //optional: change the color of the circles 
-
-            //HINT: don't forget the ending ;
             svg.selectAll("circle")
                 .data(data)
                 .enter()
@@ -67,17 +51,7 @@
                 .attr("cy", function(d) {return d[1];}) //y value
                 .attr("r", 5) //r value
                 .attr("fill", "blue"); //color 
-                
-        //5. Add data labels 
-        //NOTE: This will rely on much of the same code we have used in our SVG example. 
-            
-            // TODO: svg.selectAll()
-            //      .data()
-            //      .enter()
-            //      .append()
-            //      .text() //we want the text to return the data values
-            //      .attr() //we want to give the text an x value, use what you used above, mind the difference between circle text properties 
-            //      .attr(); //we want to give the text a y value, use what you used above, mind the difference between circle text properties 
+
             svg.selectAll("text")
                 .data(data)
                 .enter()
@@ -86,13 +60,36 @@
                 .attr("x", function(d) {return d[0] - 25; }) //x positioning
                 .attr("y", function(d) {return d[1] - 15; }) //y positioning 
                 .attr("font-size", "17px"); //font formatting 
+            
+            //bottom (x) axis
+            const bottomAxis = d3.axisBottom()
+                                .scale(xScale)
+                                .ticks(10);
 
-        /*OPTIONAL: other .attr() properties you might add to a text 
-        element could be, for example, "font-size" and "fill" 
-        (where values might be, for example, "12px", and "blue")*/
-        //OPTIONAL: try to get your labels to not overlap with the circles 
-        //HINT: don't forget the ending ;
+            //implement x axis
+            svg.append("g")
+                .attr("transform", "translate(0," + (svgH - margin) + ")")
+                .call(bottomAxis);
+            
+            //left (Y) axis
+            const leftAxis = d3.axisLeft()
+                                .scale(yScale)
+                                .ticks(10);
+            
+            //implement y axis
+            svg.append("g")
+                .attr("transform", "translate(" + margin + ",0)")
+                .call(leftAxis);
 
+            // Circles 
+            svg.selectAll("circle")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", d => xScale(d[0]))
+                .attr("cy", d => yScale(d[1]))
+                .attr("r", radius)
+                .attr("fill", "pink");
         </script>
     </body>
 </html>
