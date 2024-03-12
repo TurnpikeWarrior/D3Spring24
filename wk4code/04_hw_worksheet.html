@@ -15,7 +15,7 @@
             const svgW = 500;
             const svgH = 400;
             const margin = 25;
-            const radius = 6;    
+            const radius = 5;    
 
             const svgWidth = 800;
             const svgHeight = 600;
@@ -31,11 +31,11 @@
 
             const xScale = d3.scaleLinear()
                             .domain([0, maxX])
-                            .range([margin, svgW-margin]);
+                            .range([margin, svgW - margin]);
 
             const yScale = d3.scaleLinear()
                             .domain([0, maxY])
-                            .range([svgH-margin, margin]);
+                            .range([svgH - margin, margin]);
 
             //4. SVG 
             const svg = d3.select("body")
