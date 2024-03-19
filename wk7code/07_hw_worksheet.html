@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Big Dipper Constellation Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* We are adding our CSS up here in <style> but
+            referencing our classes in the D3 code below*/
+
+        /* SVG background */
+        svg {
+            background-color: black;
+        }
+
+        /* Chart Title */
+        .chart-title {
+            fill: white;
+            font-size: 30px; 
+            font-family: Arial;
+            text-anchor: middle;
+        }
+
+        /* Grid Lines */
+        .grid-line {
+            stroke: gray;
+        }
+
+        /* Star */
+        .star {
+            fill: white;
+        }
+
+        /* Star Path */
+        .star-path {
+            stroke: green;
+            stroke-width: 4;
+        }
+
+        /* Star Labels */
+        .star-label {
+            fill: white;
+            font-weight: bold;
+            font-size: 15px;
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+
+        //Consts/global variables
+        const w = 825;
+        const h = 600;
+        
+        //Data
+        d3.csv("bigdipper.csv").then(data => {
+        console.log("data", data)
+
+        //format data
+        data.forEach(d => {
+            d.x = 50+ +d.x;
+            d.y = +d.y;
+        });
+
+        //SVG
+        const svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        //Grid
+        const gridSize = 100;
+        const numHorizontalLines = svg.attr("height") / gridSize;
+        const numVerticalLines = svg.attr("width") / gridSize;
+
+        // Draw horizontal graph
+        for (let i = 0; i < numHorizontalLines; i++) {
+            svg.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", 0)
+                .attr("y1", i * gridSize)
+                .attr("x2", svg.attr("width"))
+                .attr("y2", i * gridSize);
+        }
+
+        // Draw vertical graph
+        for (let j = 0; j < numVerticalLines; j++) {
+            svg.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", j * gridSize)
+                .attr("y1", 0)
+                .attr("x2", j * gridSize)
+                .attr("y2", svg.attr("height"));
+        }
+        
+        // Chart Title
+        svg.append("text")
+            .attr("class", "chart-title")
+            .attr("x", svg.attr("width") / 2)
+            .attr("y", 40)
+            .text("Big Dipper Constellation");
+
+        //symbol generator
+        const star = d3.symbol()
+            .type(d3.symbolStar)
+            .size(150);
+
+        //Draw the stars
+        svg.selectAll("path")
+            .data(data)
+            .enter()
+            .append("path")
+            .attr("class", "star")
+            .attr("d", star)
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+
+        //Draw the Star Paths
+        for(let i = 0; i < data.length - 1; i++) {
+            svg.append("line")
+                .attr("class", "star-path")
+                .attr("x1", data[i].x)
+                .attr("y1", data[i].y)
+                .attr("x2", data[i+1].x)
+                .attr("y2", data[i+1].y);
+        }
+
+        //stars with labels
+        const stars = svg.selectAll(".star-label")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("class", "star-label")
+            .attr("x", d => d.x + 12)
+            .attr("y", d => d.y + 6)
+            .text(d => d.name);
+        });
+    </script>
+</body>
+</html>

@@ -81,15 +81,7 @@
                 .attr("transform", "translate(" + margin + ",0)")
                 .call(leftAxis);
 
-            // Circles 
-            svg.selectAll("circle")
-                .data(data)
-                .enter()
-                .append("circle")
-                .attr("cx", d => xScale(d[0]))
-                .attr("cy", d => yScale(d[1]))
-                .attr("r", radius)
-                .attr("fill", "pink");
+            
         </script>
     </body>
 </html>
