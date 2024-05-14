@@ -5,7 +5,9 @@
 ### Brief Abstract
 The Asian American demographic is becoming the fastest growing racial group in the United States. While the Asian population represents about 5.6% of the total American population, or about 20 million people, it has grown 102% since 2000. This also means the number of Asian American voters and eligible voters are on the rise. Unsurprinsingly, California accounts for the largest Asian American population in the lower 48 states (aka Lower 48). 
 
-This project will delve into a detailed analysis of the Asian American population. We will examine the number of immigrants, ethnic groups, and naturalized citizens. This analysis will provide a nuanced understanding of the diverse Asian American community and the influence on American elections. 
+This project will delve into a detailed analysis of the Asian American population. We will examine the number of immigrations from Asian countries within the last 20 years, the rate of naturalization, and voter registration statistics. This analysis will provide a nuanced understanding of the diverse Asian American community and its impact/influence on American elections.
+
+Fun Project - Exploring various socio-economic indicators such as literacy rates, income levels, poverty rates, student enrollments, and unemployment rates among these groups.
 
 |  | 1980 | 1990 | 2000 | 2010 | 2020 |  
 | ----- | ---- | ---- | ---- | ---- | ---- | 
