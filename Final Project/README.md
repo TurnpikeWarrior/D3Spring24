@@ -20,11 +20,11 @@ Fun Side Quest - Exploring various socio-economic indicators such as literacy ra
 ![drawing](chart2.png) 
 
 ### Link/Citation for Data  
-https://www.census.gov/topics/population/race/about.html
-https://usafacts.org/data/topics/people-society/population-and-demographics/population-data/population/
-https://www.presidency.ucsb.edu/statistics/elections
-https://www.census.gov/data/tables/time-series/demo/voting-and-registration/voting-historical-time-series.html
-https://www.migrationpolicy.org/programs/data-hub/charts/number-immigrants-who-became-us-citizens
-https://www.migrationpolicy.org/article/naturalization-trends-united-states/
-https://www.uscis.gov/citizenship-resource-center/naturalization-statistics
-https://www.presidency.ucsb.edu/statistics/data/voter-turnout-in-presidential-elections
+https://www.census.gov/topics/population/race/about.html  
+https://usafacts.org/data/topics/people-society/population-and-demographics/population-data/population/  
+https://www.presidency.ucsb.edu/statistics/elections  
+https://www.census.gov/data/tables/time-series/demo/voting-and-registration/voting-historical-time-series.html  
+https://www.migrationpolicy.org/programs/data-hub/charts/number-immigrants-who-became-us-citizens  
+https://www.migrationpolicy.org/article/naturalization-trends-united-states/  
+https://www.uscis.gov/citizenship-resource-center/naturalization-statistics  
+https://www.presidency.ucsb.edu/statistics/data/voter-turnout-in-presidential-elections  
