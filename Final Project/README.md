@@ -7,7 +7,7 @@ The Asian American demographic is becoming the fastest growing racial group in t
 
 This project will delve into a detailed analysis of the Asian American population. We will examine the number of immigrations from Asian countries within the last 20 years, the rate of naturalization, and voter registration statistics. This analysis will provide a nuanced understanding of the diverse Asian American community and its impact/influence on American elections.
 
-Fun Project - Exploring various socio-economic indicators such as literacy rates, income levels, poverty rates, student enrollments, and unemployment rates among these groups.
+Fun Side Quest - Exploring various socio-economic indicators such as literacy rates, income levels, poverty rates, student enrollments, and unemployment rates among these groups.
 
 |  | 1980 | 1990 | 2000 | 2010 | 2020 |  
 | ----- | ---- | ---- | ---- | ---- | ---- | 
