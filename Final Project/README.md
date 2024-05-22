@@ -11,7 +11,10 @@ U.S. Census is using both data from Decennial Census and American Community Surv
 
 It is worth noting that we must improve civic engagement among Asian & Pacific Islander population.
 
-Fun Side Quest - Exploring various socio-economic indicators such as literacy rates, income levels, poverty rates, student enrollments, and unemployment rates among these groups.
+Fun Side Quest - 
+Democrats vs Republicans  
+Asian population in each state  
+Immigrations from Top 5 Asian countries  
 
 ### Chart 1 
 ![drawing](chart1.png) 
