@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Project - Asian American Statistics</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <script src= "https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+
+<body>
+    <h1>Final Data Visualization Project</h1>
+
+    <h3>Files</h3>
+    <ul>
+        <li>finalproject.html</li>
+        <li>style.css</li>
+        <li>data.csv</li>
+    </ul>
+
+    <p>
+        The Asian American demographic is becoming the fastest growing racial group in the United States. While the Asian population represents about 5.6% of the total American population, or about 20 million people, it has grown 102% since 2000. This also means the number of Asian American voters and eligible voters are on the rise. Unsurprinsingly, California accounts for the largest Asian American population in the lower 48 states (aka Lower 48).
+    </p> 
+
+    <h3>U.S. Census' classification of Asian and Pacific Islander</h3>
+    <p>
+        <strong>Asian:</strong> A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.
+    </p>
+
+    <p> 
+        <strong>Native Hawaiian or Other Pacific Islander:</strong> A person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands.</p>
+
+    <p>
+        This project will delve into a detailed analysis of the Asian American population. We will examine the number of immigrations from Asian countries within the last 20 years, the rate of naturalization, and voter registration statistics. This analysis will provide a nuanced understanding of the diverse Asian American community and its impact/influence on American elections.
+    </p>
+
+    <p>U.S. Census is using both data from Decennial Census and American Community Survey so the results will vary slightly.</p>
+
+    <p>It is worth noting that we must improve civic engagement among Asian & Pacific Islander population.</p>
+    
+    <h3 class="chart-title">Immigrations from Asia to USA</h3>
+    <div id="chart1"></div>
+
+    <h3 class="chart-title">Total Population of Asian & Pacific Islander - Registered Voters vs. Voted</h3>
+    <div id="chart2"></div>
+
+    <div id="tooltip" class="tooltip" style="opacity:0;"></div>
+
+    <script>
+
+        // Chart #1 - Immigrations from Asia to USA
+        const data1 = [
+            { year: 1992, total_population_us: 255029699, Total_Population_API: 8386444 },
+            { year: 1996, total_population_us: 265228572, Total_Population_API: 10023883 },
+            { year: 2000, total_population_us: 282162411, Total_Population_API: 11173178 },
+            { year: 2004, total_population_us: 292805298, Total_Population_API: 13090057 },
+            { year: 2008, total_population_us: 304093966, Total_Population_API: 15030973 },
+            { year: 2012, total_population_us: 313914040, Total_Population_API: 16901752 },
+            { year: 2016, total_population_us: 323127515, Total_Population_API: 19045763 },
+            { year: 2020, total_population_us: 331449281, Total_Population_API: 21077850 },
+        ];
+
+        const width1 = 800;
+        const height1 = 500;
+        const margin1 = { top: 20, right: 50, bottom: 50, left: 70 };
+
+        const svg1 = d3.select("#chart1")
+            .append("svg")
+            .attr("width", width1 + margin1.left + margin1.right)
+            .attr("height", height1 + margin1.top + margin1.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin1.left},${margin1.top})`);
+
+        const x1 = d3.scaleBand()
+            .domain(data1.map(d => d.year))
+            .range([0, width1])
+            .padding(0.1);
+
+        const y1a = d3.scaleLinear()
+            .domain([0, d3.max(data1, d => d.total_population_us)])
+            .range([height1, 0]);
+
+        const y1b = d3.scaleLinear()
+            .domain([0, d3.max(data1, d => d.Total_Population_API)])
+            .range([height1, 0]);
+
+        const xAxis1 = d3.axisBottom(x1).tickFormat(d3.format("d"));
+        const yAxis1a = d3.axisLeft(y1a).tickFormat(d3.format(".2s"));
+        const yAxis1b = d3.axisRight(y1b).tickFormat(d3.format(".2s"));
+
+        svg1.append("g")
+            .attr("transform", `translate(0,${height1})`)
+            .call(xAxis1);
+
+        svg1.append("g")
+            .call(yAxis1a);
+
+        svg1.append("g")
+            .attr("transform", `translate(${width1},0)`)
+            .call(yAxis1b);
+
+        svg1.selectAll(".bar")
+            .data(data1)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x1(d.year))
+            .attr("y", d => y1a(d.total_population_us))
+            .attr("width", x1.bandwidth())
+            .attr("height", d => height1 - y1a(d.total_population_us))
+            .attr("fill", "#1f77b4");
+
+        const line = d3.line()
+            .x(d => x1(d.year) + x1.bandwidth() / 2)
+            .y(d => y1b(d.Total_Population_API));
+
+        svg1.append("path")
+            .datum(data1)
+            .attr("class", "line")
+            .attr("d", line);
+
+        const tooltip = d3.select("#tooltip");
+
+        svg1.selectAll(".dot")
+            .data(data1)
+            .enter().append("circle")
+            .attr("class", "dot")
+            .attr("cx", d => x1(d.year) + x1.bandwidth() / 2)
+            .attr("cy", d => y1b(d.Total_Population_API))
+            .attr("r", 5)
+            .attr("fill", "black")
+            .on("mouseover", function(event, d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(`Year: ${d.year}<br/> ${d3.format(",")(d.Total_Population_API)}`)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function() {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+        svg1.append("text")
+            .attr("x", width1 / 2)
+            .attr("y", height1 + margin1.bottom - 10)
+            .attr("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", "1.2em")
+            .text("Year");
+
+        svg1.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height1 / 2)
+            .attr("y", -margin1.left + 20)
+            .attr("dy", "0.75em")
+            .style("text-anchor", "middle")
+            .text("Total Population in US");
+
+            svg1.append("text")
+                .attr("class", "axis-label")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height1 / 2)
+                .attr("y", width1 + margin1.right - 15)
+                .attr("dy", "0.75em")
+                .style("text-anchor", "middle")
+                .text("Total Population of Asian & Pacific Islander");
+
+        // Chart #2: Total Population of Asian & Pacific Islander - Registered Voters vs. Voted
+        const data2 = [
+            { year: 1992, Total_Population_API: 8386444, Total_Registered_Voters: 2000000, Total_Voted: 1200000 },
+            { year: 1996, Total_Population_API: 10023883, Total_Registered_Voters: 2500000, Total_Voted: 1500000 },
+            { year: 2000, Total_Population_API: 11173178, Total_Registered_Voters: 3000000, Total_Voted: 1800000 },
+            { year: 2004, Total_Population_API: 13090057, Total_Registered_Voters: 3400000, Total_Voted: 2200000 },
+            { year: 2008, Total_Population_API: 15030973, Total_Registered_Voters: 4000000, Total_Voted: 2700000 },
+            { year: 2012, Total_Population_API: 16901752, Total_Registered_Voters: 4500000, Total_Voted: 3100000 },
+            { year: 2016, Total_Population_API: 19045763, Total_Registered_Voters: 5800000, Total_Voted: 3900000 },
+            { year: 2020, Total_Population_API: 21077850, Total_Registered_Voters: 7500000, Total_Voted: 4600000 },
+        ];
+
+        const keys2 = ["Total_Population_API", "Total_Registered_Voters", "Total_Voted"];
+        const colors2 = ["#1f77b4", "#ff7f0e", "#2ca02c"];
+
+        const width2 = 800;
+        const height2 = 500;
+        const margin2 = { top: 20, right: 30, bottom: 50, left: 70 };
+
+        const svg2 = d3.select("#chart2")
+            .append("svg")
+            .attr("width", width2 + margin2.left + margin2.right)
+            .attr("height", height2 + margin2.top + margin2.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin2.left},${margin2.top})`);
+
+        const x0 = d3.scaleBand()
+            .domain(data2.map(d => d.year))
+            .rangeRound([0, width2])
+            .paddingInner(0.1);
+
+        const x2 = d3.scaleBand()
+            .domain(keys2)
+            .rangeRound([0, x0.bandwidth()])
+            .padding(0.05);
+
+        const y2 = d3.scaleLinear()
+            .domain([0, d3.max(data2, d => d3.max(keys2, key => d[key]))])
+            .nice()
+            .rangeRound([height2, 0]);
+
+        const xAxis2 = d3.axisBottom(x0).tickFormat(d3.format("d"));
+        const yAxis2 = d3.axisLeft(y2).tickFormat(d3.format(".2s"));
+
+        svg2.append("g")
+            .attr("transform", `translate(0,${height2})`)
+            .call(xAxis2);
+
+        svg2.append("g")
+            .call(yAxis2);
+
+        svg2.append("g")
+            .selectAll("g")
+            .data(data2)
+            .join("g")
+            .attr("transform", d => `translate(${x0(d.year)},0)`)
+            .selectAll("rect")
+            .data(d => keys2.map(key => ({ key, value: d[key] })))
+            .join("rect")
+            .attr("class", "bar")
+            .attr("x", d => x1(d.key))
+            .attr("y", d => y2(d.value))
+            .attr("width", x1.bandwidth())
+            .attr("height", d => height2 - y2(d.value))
+            .attr("fill", (d, i) => colors2[i]);
+
+        svg2.append("text")
+            .attr("x", width2 / 2)
+            .attr("y", height2 + margin2.bottom - 10)
+            .attr("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", "1.2em")
+            .text("Year");
+
+        svg2.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height2 / 2)
+            .attr("y", -margin2.left + 20)
+            .attr("dy", "0.75em")
+            .style("text-anchor", "middle")
+            .style("font-size", "1.2em")
+            .text("Number of people");
+
+        const legend2 = svg2.append("g")
+            .attr("transform", `translate(${width2 - margin2.right - 20},${margin2.top})`);
+
+        keys2.forEach((key, i) => {
+            legend2.append("rect")
+                .attr("x", -600)
+                .attr("y", i * 20)
+                .attr("width", 15)
+                .attr("height", 15)
+                .attr("fill", colors2[i]);
+
+            legend2.append("text")
+                .attr("x", -580)
+                .attr("y", i * 20 + 12)
+                .attr("class", "legend")
+                .text(key.replace(/_/g, ' '));
+        });
+    </script>
+    
+
+    <h3>Side Quests for further analysis into Asian-American population</h3>
+    <ul>
+        <li>Democrats vs Republicans</li>
+        <li>Asian population in each state</li>
+        <li>Immigrations from Top 5 Asian countries</li>
+    </ul>
+
+    <h2>References</h2>
+    <p>
+        <a href="https://www.census.gov/topics/population/race/about.html">https://www.census.gov/topics/population/race/about.html</a><br/>
+        <a href="https://usafacts.org/data/topics/people-society/population-and-demographics/population-data/population/">https://usafacts.org/data/topics/people-society/population-and-demographics/population-data/population/</a><br/>
+        <a href="https://www.presidency.ucsb.edu/statistics/elections">https://www.presidency.ucsb.edu/statistics/elections</a><br/>
+        <a href="https://www.census.gov/data/tables/time-series/demo/voting-and-registration/voting-historical-time-series.html">https://www.census.gov/data/tables/time-series/demo/voting-and-registration/voting-historical-time-series.html</a><br/>
+        <a href="https://www.migrationpolicy.org/programs/data-hub/charts/number-immigrants-who-became-us-citizens">https://www.migrationpolicy.org/programs/data-hub/charts/number-immigrants-who-became-us-citizens</a><br/>
+        <a href="https://www.migrationpolicy.org/article/naturalization-trends-united-states/">https://www.migrationpolicy.org/article/naturalization-trends-united-states/</a><br/>
+        <a href="https://www.uscis.gov/citizenship-resource-center/naturalization-statistics">https://www.uscis.gov/citizenship-resource-center/naturalization-statistics</a><br/>
+        <a href="https://www.presidency.ucsb.edu/statistics/data/voter-turnout-in-presidential-elections">https://www.presidency.ucsb.edu/statistics/data/voter-turnout-in-presidential-elections</a><br/>
+    </p>
+</body>
+</html>
